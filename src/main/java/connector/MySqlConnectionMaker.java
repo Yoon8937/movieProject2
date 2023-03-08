@@ -5,9 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MySqlConnectionMaker implements ConnectionMaker {
-//    private final String ADDRRESS = "jdbc:mysql://15.164.127.30//moviedb";
-
-    private final String ADDRRESS = "jdbc:mysql://localhost/moviedb";
+    private final String ADDRRESS = "jdbc:mysql://15.164.127.30/moviedb";
+//    private final String ADDRRESS = "jdbc:mysql://localhost/moviedb";
     private final String USERNAME = "root";
     private final String PASSWORD = "1111";
 

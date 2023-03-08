@@ -6,10 +6,6 @@ import model.UserDTO;
 import java.sql.*;
 import java.util.ArrayList;
 
-/*
-*             구현해야 할 것 : 회원등급 업데이트
-* */
-
 public class UserController {
     private Connection connection;
     public UserController(ConnectionMaker connectionMaker) {
@@ -49,7 +45,6 @@ public class UserController {
 
 
     public boolean insert(UserDTO userDTO){
-        System.out.println("회원가입 메서드가 호출되었습니다.");
         String query = "INSERT INTO user (username,password,nickname) values (?,?,?)";
 
         try {
@@ -81,8 +76,6 @@ public class UserController {
             e.printStackTrace();
         }
     }
-
-
 
 
     public UserDTO selectOne(int id) {
@@ -137,7 +130,6 @@ public class UserController {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-//        System.out.println("이것은 총 멤버임 메서드"+list);
         return list;
     }
 
@@ -172,6 +164,27 @@ public class UserController {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean validateUsername(String username){
+        String query = "select * from user where username = ?";
+        boolean result = true;
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setString(1,username);
+            ResultSet resultSet = pstmt.executeQuery();
+            if(resultSet.next()){
+                result = false;
+            }
+
+            resultSet.close();
+            pstmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 
 

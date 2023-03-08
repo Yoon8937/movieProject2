@@ -44,223 +44,137 @@
         }
     </script>
 
-    <title><%=movieDTO.getTitle()%></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="/assets/js%20library/build/ckeditor.js"></script>
+
+    <script src="/assets/js/movie/printOneMovie.js"></script>
+
+<%--    <title><%=movieDTO.getTitle()%></title>--%>
+    <title></title>
 </head>
-<body>
-<c:import url="/main/navbar.jsp"/>
+<body onload="printOneMethod()">
+<c:import url="/main/movie_navbar.jsp"/>
 
-  <h1>영화 개별보기 입니다.</h1>
+<main class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <c:choose>
+                    <c:when test="${logIn.rank eq '관리자'}">
+                        <table>
+                            <tr>
+                                <th>번호</th>
+                                    <%--                <td><input type="text" id="input-id"><%=movieDTO.getId()%></td>--%>
+                                <td><input type="text" id="input-id"></td>
+                            </tr>
+                            <tr>
+                                <th>영화제목</th>
+                                <td><input type="text" id="input-title"></td>
+                            </tr>
+                            <tr>
+                                <th>	영화 등급</th>
+                                <td><input type="text" id="input-rank"></td>
+                            </tr>
 
-  <c:choose>
-      <c:when test="${logIn.rank ne '관리자'}">
-          <div>
-              <table>
-                  <thead>
-                  <tr>
-                      <th>번호</th>
-                      <th>영화제목</th>
-                      <th>제목</th>
-                      <th>영화 등급</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                      <td><%=movieDTO.getId()%></td>
-                      <td><%=movieDTO.getTitle()%></td>
-                      <td><%=movieDTO.getStory()%></td>
-                      <td><%=movieDTO.getRank()%></td>
-                  </tr>
-                  </tbody>
-              </table>
-          </div>
-      </c:when>
-      <c:otherwise>
-          <div>
-              <form action="/main/movie/movie_update_logic.jsp">
-                  <table>
-                      <thead>
-                      <tr>
-                          <th>번호</th>
-                          <th>영화제목</th>
-                          <th>제목</th>
-                          <th>영화 등급</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                          <td><%=movieDTO.getId()%></td>
-                          <td>
-                              <input type="hidden" name="movieId" value="${movieId}">
-                              <input type="text" name="title" value="<%=movieDTO.getTitle()%>">
-                          </td>
-                          <td>
-                          <textarea name="story">
-                              <%=movieDTO.getStory()%>
-                          </textarea>
-                          </td>
-                          <td>
-                              <input type="text" name="rank" value="<%=movieDTO.getRank()%>">
-                          </td>
-                      </tr>
-                      </tbody>
-                      <tfoot>
-                      <tr>
-                          <td>
-                              <button>수정하기</button>
-                          </td>
-                      </tr>
-                      </tfoot>
-                  </table>
-              </form>
-
-          </div>
-      </c:otherwise>
-  </c:choose>
-
-    <br>
-    <br>
-    <br>
-
-
-
-  <div>
-      <c:set var="logIn" value="<%=logIn%>"/>
-<%--      <form>--%>
-          <caption><h1>평론 및 평가입니다.</h1></caption>
-          <table>
-              <thead>
-              <tr>
-                  <th>번호</th>
-                  <th>닉네임</th>
-                  <th>평점</th>
-                  <th>리뷰</th>
-
-              </tr>
-              </thead>
-
-              <tbody>
-              <c:choose>
-                  <c:when test="${empty ratingList}">
-                      <tr>
-                          <td><h1>아직 등록되 평론 또는 평가가 없습니다.</h1></td>
-                      </tr>
-                  </c:when>
-                  <c:otherwise>
-                      <c:forEach items="${ratingList}" var="ratingDTO">
-                          <tr>
-                              <td>${ratingDTO.id}</td>
-                              <td>${userController.selectOne(ratingDTO.writeId).nickname}[${userController.selectOne(ratingDTO.writeId).rank}]</td>
-                              <td>${ratingDTO.score}</td>
-                              <td>
-                                  <c:choose>
-                                      <c:when test="${logIn.id ne userController.selectOne(ratingDTO.writeId).id}">
-                                          ${ratingDTO.review}
-                                      </c:when>
-                                      <c:otherwise>
-                                          <c:if test="${logIn.rank eq '평론가'}">
-
-                                                <textarea>
-                                                        ${ratingDTO.review}
-                                                </textarea>
-                                              <button>수정</button>
-                                              <span class="btn btn-outline-danger"
-                                                    onclick="delete_rating(${ratingDTO.id},<%=movieId%>)">
-                                              <button>삭제</button>
-                                          </span>
-                                          </c:if>
-                                      </c:otherwise>
-                                  </c:choose>
-                              </td>
-                          </tr>
-                      </c:forEach>
-                  </c:otherwise>
-              </c:choose>
-              </tbody>
-
-          </table>
-  </div>
-
-
-<br>
-<br>
-<br>
-
-    <c:choose>
-        <c:when test="${logIn.rank eq '평론가'}">
-            <div>
-                <form action="/main/movie/insert_review_logic_critic.jsp">
-                    <table>
-                        <caption>평론 및 평점 등록하기</caption>
-                        <thead>
-                        <tr>
-                            <th>평점</th>
-                            <th>평론</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <input type="hidden" name="movieId" value="${movieId}">
-                                <input type="hidden" name="id" value="${logIn.id}">
-                                <input type="text" name="score">
-                            </td>
-                            <td><textarea name="review"></textarea></td>
-                            <td><button>등록</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
+                            <tr>
+                                <td>
+                                    <textarea name="story" id="editor"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="btn btn-outline-primary"onclick="updateMovie()">수정하기</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </c:when>
+                    <c:otherwise>
+                        <div>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>영화제목</th>
+                                    <th>제목</th>
+                                    <th>영화 등급</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><%=movieDTO.getId()%></td>
+                                    <td><%=movieDTO.getTitle()%></td>
+                                    <td><%=movieDTO.getStory()%></td>
+                                    <td><%=movieDTO.getRank()%></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
-        </c:when>
-        <c:otherwise>
-            <div>
-                <form action="/main/movie/insert_review_logic_critic.jsp">
-                    <table>
-                        <caption>평점 등록하기</caption>
-                        <thead>
-                        <tr>
-                            <th>평점</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <input type="hidden" name="movieId" value="${movieId}">
-                                <input type="hidden" name="id" value="${logIn.id}">
-                                <input type="text" name="score">
-                            </td>
-                            <td><button>등록</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>닉네임</th>
+                        <th>평점</th>
+                        <th>평론</th>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <table id="table-review">
+                                <tbody id="tbody-review">
+                                <tr>
+                                    <td>
+                                        <input type="text" id="score" placeholder="평점을 입력해주세요.">
+                                    </td>
+                                    <c:if test="${logIn.rank eq '평론가'}">
+                                        <td>
+                                            <input type="text" id="review" placeholder="평론을 입력해주세요.">
+                                        </td>
+                                    </c:if>
+                                    <td>
+                                        <div class="btn btn-outline-dark" onclick="writeReview()">등록</div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+                    </thead>
+                    <tbody id="test">
+                    </tbody>
+                </table>
             </div>
-        </c:otherwise>
-    </c:choose>
+        </div>
+    </div>
 
 
+
+</main>
+<c:import url="/footer.jsp"/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

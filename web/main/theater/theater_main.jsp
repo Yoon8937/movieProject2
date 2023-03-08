@@ -37,64 +37,74 @@
 </head>
 
 <body>
-  <c:import url="/main/navbar.jsp"/>
-  <h1>tthis is theater main page.</h1>
+<c:import url="/main/movie_navbar.jsp"/>
+<main class="mb-4">
 
-<table>
-    <thead>
-        <tr>
-            <th>번호</th>
-            <th>상영관 이름</th>
-            <th>위치</th>
-            <th>전화번호</th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="t" items="${list}">
-<%--            <tr style="font-size: 30px;">--%>
-            <tr onclick="location.href='/main/theater/theaterPrintOne.jsp?theaterId=${t.id}'" style="font-size: 30px;">
-                <td>${t.id}</td>
-                <td>${t.name}</td>
-                <td>${t.location}</td>
-                <td>${t.tel}</td>
-            </tr>
-        </c:forEach>
-    </tbody>
-</table>
-
-<br>
-<br>
-<br>
-
-<c:if test="${logIn.rank eq '관리자'}">
-    <div>
-        <form action="/main/theater/insert_new_theater_logic.jsp">
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
             <table>
-                <caption>새로운 상영관 등록하기</caption>
                 <thead>
                 <tr>
+                    <th>번호</th>
                     <th>상영관 이름</th>
                     <th>위치</th>
-                    <th></th>
+                    <th>전화번호</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <input type="text" name="name" placeholder="등록할 CGV상영관">
-                    </td>
-                    <td>
-                        <input type="text" name="location" placeholder="위치를 입력해주세요">
-                    </td>
-                    <td><button>등록</button></td>
-                </tr>
+                <c:forEach var="t" items="${list}">
+                    <%--            <tr style="font-size: 30px;">--%>
+                    <tr onclick="location.href='/main/theater/theaterPrintOne.jsp?theaterId=${t.id}'" style="font-size: 30px;">
+                        <td>${t.id}</td>
+                        <td>${t.name}</td>
+                        <td>${t.location}</td>
+                        <td>${t.tel}</td>
+                    </tr>
+                </c:forEach>
                 </tbody>
             </table>
-        </form>
+
+            <br>
+            <br>
+            <br>
+
+            <c:if test="${logIn.rank eq '관리자'}">
+                <div>
+                    <form action="/main/theater/insert_new_theater_logic.jsp">
+                        <table>
+                            <caption>새로운 상영관 등록하기</caption>
+                            <thead>
+                            <tr>
+                                <th>상영관 이름</th>
+                                <th>위치</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" name="name" placeholder="등록할 CGV상영관">
+                                </td>
+                                <td>
+                                    <input type="text" name="location" placeholder="위치를 입력해주세요">
+                                </td>
+                                <td><button>등록</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </c:if>
+        </div>
     </div>
-</c:if>
+</div>>
+</main>
 
-
+<c:import url="/footer.jsp"/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
 </body>
 </html>
 

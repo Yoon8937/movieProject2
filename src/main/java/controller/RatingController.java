@@ -2,6 +2,7 @@ package controller;
 
 import connector.ConnectionMaker;
 import model.RatingDTO;
+import model.UserDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -40,6 +41,32 @@ public class RatingController {
     }
 
 
+    public RatingDTO selectOne(int id) {
+        RatingDTO r = null;
+        String query = "SELECT * FROM `rating` WHERE `id` = ?";
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, id);
+
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                r.setId(resultSet.getInt("id"));
+                r.setMovieId(resultSet.getInt("movieId"));
+                r.setScore(resultSet.getFloat("score"));
+                r.setReview(resultSet.getString("review"));
+            }
+
+            resultSet.close();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return r;
+    }
+
+
 
     public void delete(int id){
         String query = "delete from rating where id = ?";
@@ -71,8 +98,6 @@ public class RatingController {
             e.printStackTrace();
         }
     }
-
-
 
 
 }

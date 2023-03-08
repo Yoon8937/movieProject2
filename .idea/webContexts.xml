@@ -8,6 +8,8 @@
         <entry key="file://$PROJECT_DIR$/web/main/movie/printOneMovie.jsp" value="file://$PROJECT_DIR$/web/main/movie" />
         <entry key="file://$PROJECT_DIR$/web/main/theater/theaterPrintOne.jsp" value="file://$PROJECT_DIR$/web/main/theater" />
         <entry key="file://$PROJECT_DIR$/web/member/register.jsp" value="file://$PROJECT_DIR$/web/member" />
+        <entry key="file://$PROJECT_DIR$/web/member/userList.jsp" value="file://$PROJECT_DIR$/web/member" />
+        <entry key="file://$PROJECT_DIR$/web/test.jsp" value="file://$PROJECT_DIR$/web" />
       </map>
     </option>
   </component>

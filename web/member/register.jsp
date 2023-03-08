@@ -9,8 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-            crossorigin="anonymous"></script>
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <style>
     * { box-sizing:border-box; }
 
@@ -65,58 +66,76 @@
 </style>
 
 
+    <script>
+        let result = false;
 
+        function validateUsername(username) {
+            var data = {
+                "username": username
+            };
+            console.log(username);
+            console.log(data);
+            if (username.length >= 3) {
+                return true;
+            }
+            $.ajax({
+                url: "/user/validate",
+                type: "get",
+                data: data,
+                success: function(message) {
+                    let jsonResult = JSON.parse(message);
+``
+
+                    if (!jsonResult.result) {
+                        Swal.fire({title: '실패', text: jsonResult.message});
+                    }
+                },
+                fail: function() {
+                    console.log("error");
+                }
+            });
+
+            return false;
+        }
+
+        function validatePassword(password) {
+            // if (password.includes('@')) {
+            //     return true;
+            // }
+            // return false;
+            return true;
+        }
+
+        function validateInput() {
+            let username = document.getElementById('username');
+            let password = document.getElementById('password');
+            result = validateUsername(username.value) && validatePassword(password.value);
+
+            if (result) {
+                document.forms[0].submit();
+            } else {
+                Swal.fire({title: '!!! 오류 !!!', text: '잘못 입력하셨습니다.', icon: 'error'});
+            }
+        }
+
+    </script>
 </head>
 
 <body>
 
 
-<form action="/member/register_logic.jsp" method="post" name="regForm" onsubmit="return formCheck(this)">
+<form action="/member/register_logic.jsp" method="post" name="regForm">
 <%--<form action="/member/register_logic.jsp" method="post" name="regForm">--%>
     <div class="title">회원등록</div>
 
-    <div id="msg" class="msg">
-        <c:if test="${not empty param.msg}">
-            <i class="fa fa-exclamation-circle"> ${URLDecoder.decode(param.msg)}</i>
-        </c:if>
-    </div>
-
-    <label for="">아이디</label>
+    <label for="username">아이디</label>
     <input class="input-field" type="text" id="username" name="username" placeholder="아이디(username)">
-    <label for="">비밀번호</label>
-    <input class="input-field" type="text" id="password" name="password" placeholder="비밀번호">
-    <label for="">닉네임</label>
+    <label for="password">비밀번호</label>
+    <input class="input-field" type="password" id="password" name="password" placeholder="비밀번호">
+    <label for="nickname">닉네임</label>
     <input class="input-field" type="text" id="nickname" name="nickname" placeholder="닉네임">
-    <button>회원 가입</button>
+    <div class="btn btn-outline-primary" onclick="validateInput()">회원 가입</div>
 </form>
-
-
-<script>
-    function formCheck(frm){
-        let msg = '';
-
-        // if(frm.password.value === "" ){
-        if(frm.password.value.length < 1 ){
-            setMessage("비밀번호를 입력해야 됩니다.",frm.password);
-            return false;
-        }
-
-        if(frm.nickname.value.length < 1 ){
-            setMessage("닉네임을 입력해야 됩니다.",frm.nickname);
-            return false;
-        }
-
-        return true;
-    }
-
-    function setMessage(msg, element){
-        document.getElementById("msg").innerHTML = `<i class="fa fa-exclamation-circle"> ${'${msg}'}</i>`;
-
-        if(element){
-            element.select();
-        }
-    }
-</script>
 
 </body>
 </html>
